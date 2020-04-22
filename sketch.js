@@ -18,7 +18,7 @@ function preload(){
   pipesimg =loadImage("images/pipes.png");
   cloudsimg =loadImage("images/cloud.png");
   mario_deadimg = loadAnimation("images/mario_dead.png");
-  gameoverimg = loadImage("images/gameover.png");
+  gameoverimg = loadImage("images/gameOver.png");
   restartImg = loadImage("images/restart.png");
   bulletimg = loadImage("images/bullet.png");
   enemyimg =loadAnimation("images/enemy1.png","images/enemy2.png");
