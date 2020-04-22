@@ -14,14 +14,16 @@ function preload(){
   pipesimg =loadImage("images/pipes.png");
   cloudsimg =loadImage("images/cloud.png");
   mario_deadimg = loadAnimation("images/mario_dead.png");
-  gameover = loadImage("images/gameover.png");
+  gameoverimg = loadImage("images/gameover.png");
+  restartImg = loadImage("images/restart.png");
+  bulletimg = loadImage("images/bullet.png");
 }
 
 function setup() {
   createCanvas(1200, 400);
   ground = createSprite(600,390,1200,10);
   ground.addImage("ground",groundimg);
-  
+  ground.x = ground.width/2;
 
   mario = createSprite(50,335,10,10);
   mario.addAnimation("mario",marioimg);
@@ -31,8 +33,19 @@ function setup() {
   invisibleground = createSprite(600,375,1200,10);
   invisibleground.visible = false;
 
+ 
+  gameOver = createSprite(620,150);
+  gameOver.addImage("gameover",gameoverimg);
+  gameOver.scale = 0.5;
+  restart = createSprite(1100,40);
+  restart.addImage("restart",restartImg);
+  restart.scale =0.2;
+  gameOver.visible = false;
+  restart.visible = false;
+
   pipesGroup = new Group();
   cloudsGroup = new Group();
+  bulletGroup = new Group();
 
 }
 
@@ -47,8 +60,16 @@ function draw() {
       ground.x = ground.width/2;
     }
 
-    if(keyDown("space") && mario.y>329){
+    if(keyDown("UP_ARROW") && mario.y>329){
       mario.velocityY = -20;
+    }
+
+    if(keyWentDown("space")){
+      bullet = createSprite(mario.x,mario.y);
+      bullet.addImage("bullet",bulletimg);
+      bullet.velocityX= 4;
+      bulletGroup.add(bullet);
+
     }
 
     mario.velocityY = mario.velocityY + 1;
@@ -69,12 +90,18 @@ function draw() {
     mario.velocityY = 0;
     mario.changeAnimation("mario_dead",mario_deadimg);
     //textSize(70);
-    
     //text("GAME OVER",400,200);
-    gameOver = createSprite(620,150);
-    gameOver.addImage("gameover",gameover);
-    gameOver.scale = 0.5;
+    gameOver.visible = true;
+    restart.visible = true; 
 
+  }
+  if(mousePressedOver(restart)){
+    gameState = PLAY;
+    pipesGroup.destroyEach();
+    cloudsGroup.destroyEach();
+    gameOver.visible = false;
+    restart.visible = false;
+    mario.changeAnimation("mario",marioimg);
   }
   mario.collide(invisibleground);
   console.log(mario.y);  
@@ -98,5 +125,12 @@ function spawnClouds(){
     clouds.scale = 2;
     clouds.lifetime = 400;
     cloudsGroup.add(clouds);
+  }
+}
+function spawnEnemies(){
+  if(frameCount %120 === 0 ){
+    enemies = createSprite(1000,320,10,20);
+    enemies.velocityX = -2;
+    
   }
 }
